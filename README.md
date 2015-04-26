@@ -12,11 +12,11 @@ Spark-sample
 ```sh
 	mvn clean && mvn compile && mvn package
     $SPARK_HOME/bin/spark-submit \
-      --class org.nchc.spark.java.WordCount \
+      --class org.nchc.spark.java.first.WordCount \
       ./target/spark-sample-0.0.1.jar \
       ./README.md ./wordcounts
     $SPARK_HOME/bin/spark-submit \
-      --class org.nchc.spark.java.WordCountLambda \
+      --class org.nchc.spark.java.first.WordCountLambda \
       ./target/spark-sample-0.0.1.jar \
       ./README.md ./lambda-wordcounts
 ```

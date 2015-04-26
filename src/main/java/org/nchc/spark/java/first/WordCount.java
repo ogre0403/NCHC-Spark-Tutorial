@@ -1,7 +1,7 @@
 /**
  * Illustrates a wordcount in Java
  */
-package org.nchc.spark.java;
+package org.nchc.spark.java.first;
 
 import java.util.Arrays;
 import java.util.List;

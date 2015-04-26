@@ -1,4 +1,4 @@
-package org.nchc.spark.java;
+package org.nchc.spark.java.first;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
