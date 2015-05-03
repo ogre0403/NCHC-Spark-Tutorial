@@ -64,7 +64,7 @@ public class BFS {
                 }
             });
 
-            JavaPairRDD<Integer, Node> result = nnn.foldByKey(new Node(),
+            JavaPairRDD<Integer, Node> result = nnn.reduceByKey(
                     new Function2<Node, Node, Node>() {
                         @Override
                         public Node call(Node v1, Node v2) throws Exception {
