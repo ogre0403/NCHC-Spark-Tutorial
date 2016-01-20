@@ -1,0 +1,56 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+servers = [
+  { 
+    :hostname => "spark-master",    
+    :box => 'ubuntu/trusty64',
+    :ip => '192.168.33.10', 
+    :ram => 1024,
+    :cpus => 2
+  },
+  { 
+    :hostname => "spark-slave",
+    :box => 'ubuntu/trusty64',
+    :ip => '192.168.33.11',
+    :ram => 1024,
+    :cpus => 2 
+  }
+]
+
+Vagrant.configure(2) do |config|
+
+    # Install Oracle JDK 8
+    config.vm.provision "shell" do |s|
+        s.inline = "wget --no-check-certificate -P /tmp https://github.com/ogre0403/ubuntu-equip/raw/master/equip_java8.sh; sudo bash /tmp/equip_java8.sh ; sudo rm /tmp/equip_java8.sh"
+    end
+
+    # add user spark(PW: spark) with sudo permission
+    config.vm.provision "shell" do |s|
+        s.inline = "wget --no-check-certificate -P /tmp https://github.com/ogre0403/ubuntu-equip/raw/master/equip_sudo_users.sh; sudo bash /tmp/equip_sudo_users.sh spark spark; sudo rm /tmp/equip_sudo_users.sh"
+    end
+
+    # Install Maven
+    config.vm.provision "shell" do |s|
+        s.inline = "wget --no-check-certificate -P /tmp https://github.com/ogre0403/ubuntu-equip/raw/master/equip_maven3.sh ; sudo bash /tmp/equip_maven3.sh ; sudo rm /tmp/equip_maven3.sh"
+    end
+    
+    # Download spark tarball
+    config.vm.provision "shell" do |s|
+        s.inline = "wget -P /opt http://archive-primary.cloudera.com/cdh5/cdh/5/spark-1.5.0-cdh5.5.1.tar.gz"
+    end
+
+    servers.each do |machine|
+        config.vm.define machine[:hostname] do |node|
+            node.vm.box = machine[:box]
+            node.vm.host_name = machine[:hostname]
+            node.vm.network "private_network", ip: machine[:ip]
+            node.vm.provider "virtualbox" do |vb|
+                vb.name = machine[:hostname]
+                vb.customize ["modifyvm", :id, "--memory", machine[:ram]]
+                vb.customize ["modifyvm", :id, "--cpus", machine[:cpus]]
+                vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+            end
+        end
+    end
+end
