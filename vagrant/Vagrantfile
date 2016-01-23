@@ -37,7 +37,7 @@ Vagrant.configure(2) do |config|
     
     # Download spark tarball
     config.vm.provision "shell" do |s|
-        s.inline = "wget -P /opt http://archive-primary.cloudera.com/cdh5/cdh/5/spark-1.5.0-cdh5.5.1.tar.gz"
+        s.inline = "wget -P /opt http://apache.stu.edu.tw/spark/spark-1.5.1/spark-1.5.1-bin-hadoop2.6.tgz"
     end
 
     servers.each do |machine|
