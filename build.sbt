@@ -6,5 +6,5 @@ scalaVersion := "2.10.4"
 
 // additional libraries
 libraryDependencies ++= Seq(
-  "org.apache.spark" %% "spark-core" % "1.2.0" % "provided"
+  "org.apache.spark" %% "spark-core" % "1.5.1" % "provided"
 )
