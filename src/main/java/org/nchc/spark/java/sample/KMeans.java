@@ -1,4 +1,4 @@
-package org.nchc.spark.java.second;
+package org.nchc.spark.java.sample;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.api.java.JavaPairRDD;
