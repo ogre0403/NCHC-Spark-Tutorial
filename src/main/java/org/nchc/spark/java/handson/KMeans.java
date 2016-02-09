@@ -1,17 +1,16 @@
-package org.nchc.spark.java.sample;
+package org.nchc.spark.java.handson;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.util.Vector;
 import scala.Tuple2;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.spark.util.Vector;
 
 
 public class KMeans {
@@ -63,11 +62,25 @@ public class KMeans {
             for(Vector t: centroids)
                 logger.info(t);
 
-            Map<Integer, Vector> newCentroids = data1
-                .mapToPair( v -> new Tuple2<>(closestPoint(v, centroids), v))           // 分群
-                .mapValues( v -> new TotalVector(v.elements(),1))                       // 轉成TotalVector方便做reduceByKey
-                .reduceByKey((v1, v2) -> v1.add(v2)).mapValues( v -> v.mean())          // 找出新的centroid 座標
-                .cache().collectAsMap();
+
+            JavaPairRDD<Integer, Vector> result1 = data1.mapToPair(null);
+            // TODO: 分群, 計算每個Vector屬於那一個組中心
+            //delete null and replaced by appropriate Function expression
+
+            JavaPairRDD<Integer, TotalVector> result2 = result1.mapValues(null);
+            // TODO: 每個Vector轉成TotalVector方便做reduceByKey
+            //delete null and replaced by appropriate Function expression
+
+            JavaPairRDD<Integer, TotalVector> result3 = result2.reduceByKey(null);
+            // TODO: 將所有點的座標加總
+            //delete null and replaced by appropriate Function expression
+
+            JavaPairRDD<Integer, Vector> result4 = result3.mapValues(null);
+            // TODO: 計算所有點的幾何中心, 找出新的centroid 座標
+            //delete null and replaced by appropriate Function expression
+
+            Map<Integer, Vector> newCentroids = result4.cache().collectAsMap();
+
 
             // 求新舊centroid的delta
             tempDist = 0.0;
