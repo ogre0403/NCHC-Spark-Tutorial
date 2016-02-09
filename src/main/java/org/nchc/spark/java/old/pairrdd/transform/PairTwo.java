@@ -1,4 +1,4 @@
-package org.nchc.spark.java.pairrdd.transform;
+package org.nchc.spark.java.old.pairrdd.transform;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;

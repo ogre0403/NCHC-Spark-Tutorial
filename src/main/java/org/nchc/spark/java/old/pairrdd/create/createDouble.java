@@ -1,4 +1,4 @@
-package org.nchc.spark.java.pairrdd.create;
+package org.nchc.spark.java.old.pairrdd.create;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;

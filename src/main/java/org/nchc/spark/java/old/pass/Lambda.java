@@ -1,4 +1,4 @@
-package org.nchc.spark.java.pass;
+package org.nchc.spark.java.old.pass;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;

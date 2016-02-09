@@ -1,4 +1,4 @@
-package org.nchc.spark.java.bfs;
+package org.nchc.spark.java.old.bfs;
 
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.log4j.Logger;

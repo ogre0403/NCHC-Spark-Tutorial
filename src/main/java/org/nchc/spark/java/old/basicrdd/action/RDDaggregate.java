@@ -1,4 +1,4 @@
-package org.nchc.spark.java.basicrdd.action;
+package org.nchc.spark.java.old.basicrdd.action;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;

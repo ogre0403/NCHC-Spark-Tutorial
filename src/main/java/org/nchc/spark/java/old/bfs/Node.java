@@ -1,4 +1,4 @@
-package org.nchc.spark.java.bfs;
+package org.nchc.spark.java.old.bfs;
 
 
 import java.io.Serializable;
