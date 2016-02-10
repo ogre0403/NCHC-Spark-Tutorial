@@ -1,6 +1,7 @@
 package org.nchc.spark.java.sample;
 
 import org.apache.log4j.Logger;
+import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFunction;
@@ -15,7 +16,9 @@ public class EstimatePi {
     public static void main(String[] args) {
 
         int NUM_SAMPLES = 10000;
-        JavaSparkContext sc = new JavaSparkContext("local", "Pi");
+        SparkConf conf = new SparkConf().setAppName("Pi");
+        JavaSparkContext sc = new JavaSparkContext(conf);
+
         List<Integer> l = new ArrayList<>(NUM_SAMPLES);
         for (int i = 0; i < NUM_SAMPLES; i++) {
             l.add(i);
