@@ -2,6 +2,8 @@ package org.nchc.spark.scala
 
 import org.apache.spark._
 
+//TODO: Exercise i-4
+//Build and lanuch scala project
 object HelloWorld {
   def main(args: Array[String]) {
     val inputFile = args(0)

@@ -1,5 +1,7 @@
 from pyspark import SparkConf, SparkContext
 
+# TODO: Exercise i-4:
+# Launch standalone project
 conf = SparkConf().setAppName("HelloWorld")
 sc = SparkContext(conf = conf)
 lines = sc.textFile("README.md")

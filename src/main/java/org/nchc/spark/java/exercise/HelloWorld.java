@@ -1,4 +1,4 @@
-package org.nchc.spark.java.handson;
+package org.nchc.spark.java.exercise;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
@@ -20,7 +20,8 @@ public class HelloWorld {
 
         JavaRDD<String> pythonLines = lines.filter(
             null
-            //TODO: filter out line containing "Python"
+            //TODO: Exercise i-3, i-4
+            // filter out line containing "Python"
             // delete null and replaced by appropriate Function class
         );
 

@@ -1,8 +1,7 @@
-package org.nchc.spark.java.handson;
+package org.nchc.spark.java.exercise;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.api.java.JavaSparkContext;
-import scala.Tuple2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +20,12 @@ public class EstimatePiLambda {
 
         long count = sc.parallelize(l)
                 .mapToPair(v -> null)
-                //TODO: use mapToPair() to generate random axis (x,y)
+                //TODO: Exercise ii-6
+                // use mapToPair() to generate random axis (x,y)
                 //delete null and replaced by appropriate Function expression
                 .filter(v -> true)
-                //TODO: use filter() to filter out (x,y) outside unit cycle
+                //TODO: Exercise ii-6
+                // use filter() to filter out (x,y) outside unit cycle
                 //delete true and replaced by appropriate Function class
                 .count();
 

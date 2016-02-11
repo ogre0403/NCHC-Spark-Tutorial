@@ -1,4 +1,4 @@
-package org.nchc.spark.java.handson;
+package org.nchc.spark.java.exercise;
 
 
 import org.apache.log4j.Logger;
@@ -7,10 +7,7 @@ import org.apache.spark.api.java.JavaDoubleRDD;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.DoubleFunction;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
-import org.apache.spark.api.java.function.PairFunction;
 import org.nchc.spark.java.sample.ApacheAccessLog;
 import scala.Tuple2;
 
@@ -89,10 +86,12 @@ public class LogAnalyzer {
         //   since multiple transformations and actions will be called on that data.
 
         JavaRDD<ApacheAccessLog> result1 = logLines.map(null);
-        //TODO: 利用parseFromLogLine()將日志字串轉成ApacheAccessLog物件
+        //TODO: Exercise ii-9
+        // 利用parseFromLogLine()將日志字串轉成ApacheAccessLog物件
 
         JavaRDD<ApacheAccessLog> result2 = result1.filter(null);
-        // TODO: 將不符合格式的資料篩除
+        // TODO: Exercise ii-9
+        // 將不符合格式的資料篩除
 
         JavaRDD<ApacheAccessLog> accessLogs = result2.cache();
         long validLogCount = accessLogs.count();
@@ -103,7 +102,8 @@ public class LogAnalyzer {
         //   are called on that RDD.
 
         JavaDoubleRDD contentSizes = accessLogs.mapToDouble(null).cache();
-        // TODO: 利用ApacheAccessLog的getContentSizeDouble(), 產生DoubleRDD
+        // TODO: Exercise ii-9
+        // 利用ApacheAccessLog的getContentSizeDouble(), 產生DoubleRDD
 
         logger.info("===============================");
         logger.info("Contents basic statistic: ");
@@ -121,7 +121,8 @@ public class LogAnalyzer {
 
         JavaPairRDD<Integer, ApacheAccessLog> result3 = accessLogs.mapToPair(null);
         Map<Integer, Object> responseCodeToCount = result3.countByKey();
-        //TODO: 將JavaRDD<ApacheAccessLog>轉成JavaPairRDD<Integer, ApacheAccessLog>
+        //TODO: Exercise ii-9
+        // 將JavaRDD<ApacheAccessLog>轉成JavaPairRDD<Integer, ApacheAccessLog>
         // 利用ApacheAccessLog的getResponseCode()取得Integer型態的http protocol回傳值
 
 
@@ -139,13 +140,16 @@ public class LogAnalyzer {
         JavaPairRDD<String, Long> result4 = accessLogs.mapToPair(log -> new Tuple2<>(log.getIpAddress(), 1L));
         JavaPairRDD<String, Long> result5 = result4.reduceByKey(SUM_REDUCER);
         JavaPairRDD<String, Long> result6 = result5.filter(null);
-        //TODO: 篩選出大於threshold的ip
+        //TODO: Exercise ii-9
+        // 篩選出大於threshold的ip
 
         JavaRDD<String> result7 = result6.map( null);
-        //TODO: 利用map()將JavaPairRDD<String, Long>轉成JavaRDD<String>
+        //TODO: Exercise ii-9
+        // 利用map()將JavaPairRDD<String, Long>轉成JavaRDD<String>
 
         result7.foreach(null);
-        // TODO: 印出RDD中的每個元素
+        // TODO: Exercise ii-9
+        // 印出RDD中的每個元素
 
 
         // Top Endpoints.
@@ -153,7 +157,8 @@ public class LogAnalyzer {
         logger.info("Top 3 Endpoints: ");
         JavaPairRDD<String, Long> result8 = accessLogs.mapToPair(log -> new Tuple2<>(log.getEndpoint(), 1L));
         JavaPairRDD<String, Long> result9 = result8.groupByKey().mapValues(null);
-        //TODO: 利用mapValues()計算groupByKey()結果的總合
+        //TODO: Exercise ii-9
+        // 利用mapValues()計算groupByKey()結果的總合
         // 作用相當於reduceByKey()
 
         List<Tuple2<String, Long>> topEndpoints = result9.top(3, new ValueComparator<>(Comparator.<Long>naturalOrder()));

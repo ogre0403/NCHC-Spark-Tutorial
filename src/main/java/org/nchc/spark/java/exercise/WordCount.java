@@ -1,7 +1,7 @@
 /**
  * Illustrates a wordcount in Java
  */
-package org.nchc.spark.java.handson;
+package org.nchc.spark.java.exercise;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
@@ -61,7 +61,8 @@ public class WordCount {
 
         JavaPairRDD<String, Integer> counts_apporache_2 = word_one
             .foldByKey(0, null
-                    //TODO: use foldByKey() to compute wordcount
+                    //TODO: Exercise ii-7
+                    // use foldByKey() to compute wordcount
                     //delete null and replaced by appropriate Function class
             );
         result = counts_apporache_2.collect();
@@ -71,7 +72,8 @@ public class WordCount {
         JavaPairRDD<String, Integer> counts_apporache_3 = word_one
             .groupByKey()
             .mapValues(null
-                     //TODO: use groupByKey() + mapValue() to compute wordcount
+                     //TODO: Exercise ii-7
+                     // use groupByKey() + mapValue() to compute wordcount
                      //delete null and replaced by appropriate Function class
             );
         result = counts_apporache_3.collect();

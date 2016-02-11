@@ -1,11 +1,10 @@
-package org.nchc.spark.java.handson;
+package org.nchc.spark.java.exercise;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.util.Vector;
-import scala.Tuple2;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -64,19 +63,23 @@ public class KMeans {
 
 
             JavaPairRDD<Integer, Vector> result1 = data1.mapToPair(null);
-            // TODO: 分群, 計算每個Vector屬於那一個組中心
+            // TODO: Exercise ii-8
+            // 分群, 計算每個Vector屬於那一個組中心
             //delete null and replaced by appropriate Function expression
 
             JavaPairRDD<Integer, TotalVector> result2 = result1.mapValues(null);
-            // TODO: 每個Vector轉成TotalVector方便做reduceByKey
+            // TODO: Exercise ii-8
+            // 每個Vector轉成TotalVector方便做reduceByKey
             //delete null and replaced by appropriate Function expression
 
             JavaPairRDD<Integer, TotalVector> result3 = result2.reduceByKey(null);
-            // TODO: 將所有點的座標加總
+            // TODO: Exercise ii-8
+            // 將所有點的座標加總
             //delete null and replaced by appropriate Function expression
 
             JavaPairRDD<Integer, Vector> result4 = result3.mapValues(null);
-            // TODO: 計算所有點的幾何中心, 找出新的centroid 座標
+            // TODO: Exercise ii-8
+            // 計算所有點的幾何中心, 找出新的centroid 座標
             //delete null and replaced by appropriate Function expression
 
             Map<Integer, Vector> newCentroids = result4.cache().collectAsMap();
