@@ -1,4 +1,4 @@
-package org.nchc.spark.java.sample;
+package org.nchc.spark.java.sample.ii;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;

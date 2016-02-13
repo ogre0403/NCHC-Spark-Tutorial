@@ -1,7 +1,7 @@
 /**
  * Illustrates a wordcount in Java
  */
-package org.nchc.spark.java.exercise;
+package org.nchc.spark.java.sample.ii;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
@@ -9,6 +9,7 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.FlatMapFunction;
+import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.PairFunction;
 import scala.Tuple2;
@@ -60,22 +61,27 @@ public class WordCount {
             logger.info(r);
 
         JavaPairRDD<String, Integer> counts_apporache_2 = word_one
-            .foldByKey(0, null
-                    //TODO: Exercise ii-7
-                    // use foldByKey() to compute wordcount
-                    //delete null and replaced by appropriate Function class
-            );
+            .foldByKey(0, new Function2<Integer, Integer, Integer>() {
+                @Override
+                public Integer call(Integer v1, Integer v2) throws Exception {
+                    return v1 + v2;
+                }
+            });
         result = counts_apporache_2.collect();
         for(Tuple2 r : result)
             logger.info(r);
 
         JavaPairRDD<String, Integer> counts_apporache_3 = word_one
             .groupByKey()
-            .mapValues(null
-                     //TODO: Exercise ii-7
-                     // use groupByKey() + mapValue() to compute wordcount
-                     //delete null and replaced by appropriate Function class
-            );
+            .mapValues(new Function<Iterable<Integer>, Integer>() {
+                @Override
+                public Integer call(Iterable<Integer> v1) throws Exception {
+                    int sum = 0;
+                    for (Integer v : v1)
+                        sum = sum + v;
+                    return sum;
+                }
+            });
         result = counts_apporache_3.collect();
         for(Tuple2 r : result)
             logger.info(r);

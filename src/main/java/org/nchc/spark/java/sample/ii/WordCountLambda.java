@@ -1,4 +1,4 @@
-package org.nchc.spark.java.exercise;
+package org.nchc.spark.java.sample.ii;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
@@ -27,24 +27,15 @@ public class WordCountLambda {
                 .mapToPair(w -> new Tuple2<>(w, 1)).cache();
 
 
-        result = word_one.reduceByKey((a,b) -> a + b).collect();
+        result = word_one.reduceByKey((a, b) -> a + b).collect();
         for(Tuple2 r : result)
             logger.info(r);
 
-        result = word_one
-                .foldByKey(0, null )
-                //TODO: use foldByKey() to compute wordcount
-                // delete null and replaced by appropriate Function expression
-                .collect();
+        result = word_one.foldByKey(0, (a,b) -> a + b).collect();
         for(Tuple2 r : result)
             logger.info(r);
 
-        result = word_one
-                .groupByKey()
-                .mapValues(l -> 0)
-                //TODO: use groupByKey() + mapValue() to compute wordcount
-                // delete l -> 0 and replaced by appropriate Function expression
-                .collect();
+        result = word_one.groupByKey().mapValues(l -> SUM(l)).collect();
         for(Tuple2 r : result)
             logger.info(r);
     }

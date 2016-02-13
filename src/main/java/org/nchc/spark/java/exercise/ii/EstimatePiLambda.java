@@ -1,4 +1,4 @@
-package org.nchc.spark.java.exercise;
+package org.nchc.spark.java.exercise.ii;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.api.java.JavaSparkContext;

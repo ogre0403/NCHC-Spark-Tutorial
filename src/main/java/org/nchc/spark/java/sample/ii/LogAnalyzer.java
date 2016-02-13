@@ -1,13 +1,15 @@
-package org.nchc.spark.java.exercise;
+package org.nchc.spark.java.sample.ii;
 
 
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaDoubleRDD;
-import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.api.java.function.DoubleFunction;
+import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
+import org.apache.spark.api.java.function.PairFunction;
 import org.nchc.spark.java.sample.ApacheAccessLog;
 import scala.Tuple2;
 
@@ -85,15 +87,20 @@ public class LogAnalyzer {
         // Convert the text log lines to ApacheAccessLog objects and cache them
         //   since multiple transformations and actions will be called on that data.
 
-        JavaRDD<ApacheAccessLog> result1 = logLines.map(null);
-        //TODO: Exercise ii-9
-        // 利用parseFromLogLine()將日志字串轉成ApacheAccessLog物件
-
-        JavaRDD<ApacheAccessLog> result2 = result1.filter(null);
-        // TODO: Exercise ii-9
-        // 將不符合格式的資料篩除
-
-        JavaRDD<ApacheAccessLog> accessLogs = result2.cache();
+        JavaRDD<ApacheAccessLog> accessLogs = logLines
+                .map(new Function<String, ApacheAccessLog>() {
+                    @Override
+                    public ApacheAccessLog call(String v1) throws Exception {
+                        return parseFromLogLine(v1);
+                    }
+                })
+                .filter(new Function<ApacheAccessLog, Boolean>() {
+                    @Override
+                    public Boolean call(ApacheAccessLog v1) throws Exception {
+                        return v1 != null;
+                    }
+                })
+                .cache();
         long validLogCount = accessLogs.count();
         logger.info("Valid Apache Log Count : " + validLogCount);
 
@@ -101,10 +108,13 @@ public class LogAnalyzer {
         // Note how the contentSizes are cached as well since multiple actions
         //   are called on that RDD.
 
-        JavaDoubleRDD contentSizes = accessLogs.mapToDouble(null).cache();
-        // TODO: Exercise ii-9
-        // 利用ApacheAccessLog的getContentSizeDouble(), 產生DoubleRDD
-
+        JavaDoubleRDD contentSizes = accessLogs.mapToDouble(
+                new DoubleFunction<ApacheAccessLog>() {
+                    @Override
+                    public double call(ApacheAccessLog apacheAccessLog) throws Exception {
+                        return apacheAccessLog.getContentSizeDouble();
+                    }
+                }).cache();
         logger.info("===============================");
         logger.info("Contents basic statistic: ");
         logger.info((String.format("Avg: %s, Stdev: %s, Var %s, Min: %s, Max: %s",
@@ -117,15 +127,14 @@ public class LogAnalyzer {
 
 
         // Use countByKey to Compute Count of each Response Code.
-
-
-        JavaPairRDD<Integer, ApacheAccessLog> result3 = accessLogs.mapToPair(null);
-        Map<Integer, Object> responseCodeToCount = result3.countByKey();
-        //TODO: Exercise ii-9
-        // 將JavaRDD<ApacheAccessLog>轉成JavaPairRDD<Integer, ApacheAccessLog>
-        // 利用ApacheAccessLog的getResponseCode()取得Integer型態的http protocol回傳值
-
-
+        Map<Integer, Object>  responseCodeToCount = accessLogs
+                .mapToPair(new PairFunction<ApacheAccessLog, Integer, ApacheAccessLog>() {
+                    @Override
+                    public Tuple2<Integer, ApacheAccessLog> call(ApacheAccessLog log) throws Exception {
+                        return new Tuple2<Integer, ApacheAccessLog>(log.getResponseCode(), log);
+                    }
+                })
+                .countByKey();
         logger.info("===============================");
         logger.info("Response code counts: ");
         for (Map.Entry<Integer, Object> entry : responseCodeToCount.entrySet()){
@@ -137,32 +146,36 @@ public class LogAnalyzer {
         // Find out Any IPAddress that has accessed the server more than 10 times.
         logger.info("===============================");
         logger.info("IPAddress that access more than 10 times: ");
-        JavaPairRDD<String, Long> result4 = accessLogs.mapToPair(log -> new Tuple2<>(log.getIpAddress(), 1L));
-        JavaPairRDD<String, Long> result5 = result4.reduceByKey(SUM_REDUCER);
-        JavaPairRDD<String, Long> result6 = result5.filter(null);
-        //TODO: Exercise ii-9
-        // 篩選出大於threshold的ip
-
-        JavaRDD<String> result7 = result6.map( null);
-        //TODO: Exercise ii-9
-        // 利用map()將JavaPairRDD<String, Long>轉成JavaRDD<String>
-
-        result7.foreach(null);
-        // TODO: Exercise ii-9
-        // 印出RDD中的每個元素
+        accessLogs.mapToPair(log -> new Tuple2<>(log.getIpAddress(), 1L))
+                .reduceByKey(SUM_REDUCER)
+                .filter(tuple -> tuple._2() > ACCESS_THRESHOLD)
+                .map(new Function<Tuple2<String,Long>, String>() {
+                    @Override
+                    public String call(Tuple2<String, Long> v1) throws Exception {
+                        return v1._1();
+                    }
+                })
+                .foreach(s -> logger.info(s));
 
 
         // Top Endpoints.
         logger.info("===============================");
         logger.info("Top 3 Endpoints: ");
-        JavaPairRDD<String, Long> result8 = accessLogs.mapToPair(log -> new Tuple2<>(log.getEndpoint(), 1L));
-        JavaPairRDD<String, Long> result9 = result8.groupByKey().mapValues(null);
-        //TODO: Exercise ii-9
-        // 利用mapValues()計算groupByKey()結果的總合
-        // 作用相當於reduceByKey()
-
-        List<Tuple2<String, Long>> topEndpoints = result9.top(3, new ValueComparator<>(Comparator.<Long>naturalOrder()));
+        List<Tuple2<String, Long>> topEndpoints = accessLogs
+                .mapToPair(log -> new Tuple2<>(log.getEndpoint(), 1L))
+                .groupByKey()
+                .mapValues(new Function<Iterable<Long>, Long>() {
+                    @Override
+                    public Long call(Iterable<Long> v1) throws Exception {
+                        long sum = 0;
+                        for(Long v : v1)
+                            sum = sum + v;
+                        return new Long(sum);
+                    }
+                })
+                .top(3, new ValueComparator<>(Comparator.<Long>naturalOrder()));
         logger.info(String.format("Top Endpoints: %s", topEndpoints));
+
 
         // Stop the Spark Context before exiting.
         sc.stop();

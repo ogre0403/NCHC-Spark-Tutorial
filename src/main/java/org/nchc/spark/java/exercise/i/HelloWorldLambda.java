@@ -1,4 +1,4 @@
-package org.nchc.spark.java.exercise;
+package org.nchc.spark.java.exercise.i;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * Created by ogre0403 on 2016/1/23.
  */
-public class HelloWorld {
-    private static Logger logger = Logger.getLogger(HelloWorld.class);
+public class HelloWorldLambda {
+    private static Logger logger = Logger.getLogger(HelloWorldLambda.class);
     public static void main(String[] args) {
         String inputFile = args[0];
         SparkConf conf = new SparkConf().setAppName("HelloWorld").setMaster("local");
@@ -19,15 +19,15 @@ public class HelloWorld {
         JavaRDD<String> lines = sc.textFile(inputFile);
 
         JavaRDD<String> pythonLines = lines.filter(
-            null
+            line -> true
             //TODO: Exercise i-3, i-4
             // filter out line containing "Python"
-            // delete null and replaced by appropriate Function class
+            // delete line -> true and replaced by appropriate Function expression
         );
 
         List<String> result = pythonLines.collect();
-
         for(String s: result)
             logger.info(s);
+
     }
 }

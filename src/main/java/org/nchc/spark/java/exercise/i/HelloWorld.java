@@ -1,10 +1,9 @@
-package org.nchc.spark.java.sample;
+package org.nchc.spark.java.exercise.i;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
 
 import java.util.List;
 
@@ -20,12 +19,10 @@ public class HelloWorld {
         JavaRDD<String> lines = sc.textFile(inputFile);
 
         JavaRDD<String> pythonLines = lines.filter(
-                new Function<String, Boolean>() {
-                    @Override
-                    public Boolean call(String line) throws Exception {
-                        return line.contains("Python");
-                    }
-                }
+            null
+            //TODO: Exercise i-3, i-4
+            // filter out line containing "Python"
+            // delete null and replaced by appropriate Function class
         );
 
         List<String> result = pythonLines.collect();

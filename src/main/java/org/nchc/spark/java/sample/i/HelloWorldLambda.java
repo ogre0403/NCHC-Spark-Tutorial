@@ -1,4 +1,4 @@
-package org.nchc.spark.java.exercise;
+package org.nchc.spark.java.sample.i;
 
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
@@ -19,10 +19,7 @@ public class HelloWorldLambda {
         JavaRDD<String> lines = sc.textFile(inputFile);
 
         JavaRDD<String> pythonLines = lines.filter(
-            line -> true
-            //TODO: Exercise i-3, i-4
-            // filter out line containing "Python"
-            // delete line -> true and replaced by appropriate Function expression
+            line -> line.contains("Python")
         );
 
         List<String> result = pythonLines.collect();
