@@ -1,13 +1,23 @@
 package org.nchc.spark.java.sample;
 
 
+import org.apache.log4j.Logger;
+
 import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class represents an Apache access log line.
  * See http://httpd.apache.org/docs/2.2/logs.html for more details.
  */
 public class ApacheAccessLog implements Serializable {
+
+    private static Logger logger = Logger.getLogger(ApacheAccessLog.class);
+    private static final String LOG_ENTRY_PATTERN =
+            // 1:IP  2:client 3:user 4:date time                   5:method 6:req 7:proto   8:respcode 9:size
+            "^(\\S+) (\\S+) (\\S+) \\[([\\w:/]+\\s[+\\-]\\d{4})\\] \"(\\S+) (\\S+) (\\S+)\" (\\d{3}) (\\d+)";
+    private static final Pattern PATTERN = Pattern.compile(LOG_ENTRY_PATTERN);
 
     private String ipAddress;
     private String clientIdentd;
@@ -114,5 +124,16 @@ public class ApacheAccessLog implements Serializable {
         return String.format("%s %s %s [%s] \"%s %s %s\" %s %s",
                 ipAddress, clientIdentd, userID, dateTimeString, method, endpoint,
                 protocol, responseCode, contentSize);
+    }
+
+    public static ApacheAccessLog parseFromLogLine(String logline) {
+        Matcher m = PATTERN.matcher(logline);
+        if (!m.find()) {
+            logger.error("Cannot parse logline : " + logline);
+            return null;
+        }
+
+        return new ApacheAccessLog(m.group(1), m.group(2), m.group(3), m.group(4),
+                m.group(5), m.group(6), m.group(7), m.group(8), m.group(9));
     }
 }

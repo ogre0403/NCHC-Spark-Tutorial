@@ -12,6 +12,11 @@
       <version>1.5.1</version>
       <!--<scope>provided</scope>-->
     </dependency>
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-streaming_2.10</artifactId>
+      <version>1.5.1</version>
+    </dependency>
   </dependencies>
   <properties>
     <java.version>1.8</java.version>
@@ -20,14 +25,14 @@
     <pluginManagement>
       <plugins>
         <plugin>
-	  <groupId>org.apache.maven.plugins</groupId>
+      <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.1</version>
           <configuration>
             <source>${java.version}</source>
             <target>${java.version}</target>
           </configuration>
-	</plugin>
+    </plugin>
       </plugins>
     </pluginManagement>
   </build>
