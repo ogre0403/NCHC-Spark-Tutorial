@@ -35,6 +35,11 @@ Vagrant.configure(2) do |config|
         s.inline = "wget --no-check-certificate -P /tmp https://github.com/ogre0403/ubuntu-equip/raw/master/equip_maven3.sh ; sudo bash /tmp/equip_maven3.sh ; sudo rm /tmp/equip_maven3.sh"
     end
     
+    # Install R
+    config.vm.provision "shell" do |s|
+        s.inline = "wget --no-check-certificate -P /tmp https://github.com/ogre0403/ubuntu-equip/raw/master/equip_R.sh ; bash /tmp/equip_R.sh ; rm /tmp/equip_R.sh"
+    end
+
     # Download spark tarball
     config.vm.provision "shell" do |s|
         s.inline = "wget -P /opt http://apache.stu.edu.tw/spark/spark-1.5.1/spark-1.5.1-bin-hadoop2.6.tgz"
@@ -46,7 +51,7 @@ Vagrant.configure(2) do |config|
     end
 
     # configure shared folder
-    # config.vm.synced_folder '/Users/ogre0403/IdeaProjects', '/vagrant', disabled: false
+    config.vm.synced_folder '/Users/ogre0403/IdeaProjects', '/vagrant', disabled: false
 
     servers.each do |machine|
         config.vm.define machine[:hostname] do |node|
